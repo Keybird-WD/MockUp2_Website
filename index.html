@@ -1,0 +1,515 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IncorpMedia Productions</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Italiana&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C8A96E;
+  --gold2:#E4C98B;
+  --goldDim:rgba(200,169,110,.14);
+  --bg:#0B0D13;
+  --bg2:#13151F;
+  --bg3:#1C1E2A;
+  --bg4:#242636;
+  --text:#EDE9E0;
+  --sub:#9A9590;
+  --dim:#5A5650;
+  --border:rgba(200,169,110,.12);
+  --borderHard:rgba(200,169,110,.28);
+  --white:#F8F5EF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;cursor:none}
+img{display:block}
+
+/* CURSOR */
+.c-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;position:fixed;transform:translate(-50%,-50%);pointer-events:none;z-index:9999;transition:transform .1s}
+.c-ring{width:32px;height:32px;border:1px solid var(--gold);border-radius:50%;position:fixed;transform:translate(-50%,-50%);pointer-events:none;z-index:9998;opacity:.45;transition:all .18s ease}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:32px 6%;transition:all .5s}
+nav.scrolled{background:rgba(11,13,19,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:20px 6%}
+.logo{display:flex;align-items:center;gap:14px}
+.limg{height:46px;width:46px;object-fit:contain;filter:brightness(0) invert(1);opacity:.88}
+.ltxt strong{display:block;font-family:'Italiana',serif;font-size:20px;letter-spacing:5px;color:var(--white);line-height:1;font-weight:400}
+.ltxt em{font-style:normal;font-size:6.5px;letter-spacing:7px;color:var(--gold);text-transform:uppercase}
+.nl{display:flex;gap:40px;list-style:none}
+.nl a{text-decoration:none;color:var(--sub);font-size:9.5px;letter-spacing:3px;text-transform:uppercase;font-weight:500;transition:color .35s;position:relative}
+.nl a::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:1px;background:var(--gold);transition:width .35s}
+.nl a:hover{color:var(--gold)}.nl a:hover::after{width:100%}
+.ncta{background:var(--gold);color:var(--bg);border:none;padding:11px 28px;font-family:'DM Sans';font-size:9px;letter-spacing:3px;font-weight:600;text-transform:uppercase;cursor:none;transition:all .35s}
+.ncta:hover{background:var(--gold2)}
+
+/* HAMBURGER */
+.hmb{display:none;flex-direction:column;gap:5px;cursor:none;background:none;border:none;padding:4px;z-index:1001}
+.hmb span{display:block;width:26px;height:1px;background:var(--white);transition:all .4s}
+.hmb.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.hmb.open span:nth-child(2){opacity:0}
+.hmb.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+/* MOBILE MENU */
+.mmenu{display:none;position:fixed;inset:0;background:var(--bg);z-index:850;flex-direction:column;align-items:center;justify-content:center}
+.mmenu.open{display:flex}
+.mml{list-style:none;text-align:center}
+.mml li{padding:4px 0}
+.mma{text-decoration:none;font-family:'Cormorant Garamond',serif;font-size:54px;color:var(--text);display:block;padding:8px 48px;font-weight:300;letter-spacing:3px;transition:color .3s;font-style:italic}
+.mma:hover{color:var(--gold)}
+.mmcta{margin-top:40px;background:var(--gold);color:var(--bg);border:none;padding:14px 44px;font-family:'DM Sans';font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:none;font-weight:600}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden;background:var(--bg)}
+.hleft{padding:160px 8% 100px 6%;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+.hright{position:relative;overflow:hidden}
+.hright::before{content:'';position:absolute;left:0;top:0;bottom:0;width:40%;background:linear-gradient(90deg,var(--bg),transparent);z-index:1}
+.hright::after{content:'';position:absolute;inset:0;background:rgba(11,13,19,.35)}
+.hright-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(18%) contrast(1.06)}
+
+.grain{position:fixed;inset:0;pointer-events:none;z-index:1000;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:gn 8s steps(10) infinite}
+@keyframes gn{from{background-position:0 0}to{background-position:256px 256px}}
+
+.hero-rule{width:48px;height:1px;background:var(--gold);margin-bottom:28px;opacity:0;animation:fadein 1s .2s forwards}
+.badge{font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:28px;opacity:0;animation:fadein 1s .35s forwards}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(62px,7.5vw,108px);line-height:.88;letter-spacing:-1.5px;color:var(--white);margin-bottom:36px;font-weight:300;opacity:0;animation:fadein 1s .5s forwards}
+h1 em{font-style:italic;color:var(--gold)}
+.hsub{font-size:13.5px;line-height:1.95;color:var(--sub);max-width:400px;margin-bottom:52px;font-weight:300;opacity:0;animation:fadein 1s .7s forwards}
+.btns{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:fadein 1s .85s forwards}
+.btn{background:var(--gold);color:var(--bg);padding:16px 38px;border:none;cursor:none;font-family:'DM Sans';font-size:9px;letter-spacing:4px;font-weight:600;text-transform:uppercase;transition:all .35s;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;inset:0;background:var(--gold2);transform:translateX(-101%);transition:transform .35s ease}
+.btn:hover::after{transform:translateX(0)}
+.btn span{position:relative;z-index:1}
+.bto{background:transparent;color:var(--text);padding:15px 38px;border:1px solid rgba(237,233,224,.2);cursor:none;font-family:'DM Sans';font-size:9px;letter-spacing:4px;font-weight:400;text-transform:uppercase;transition:all .35s;display:flex;align-items:center;gap:12px}
+.bto:hover{border-color:var(--gold);color:var(--gold)}
+.play-icon{width:26px;height:26px;border:1px solid currentColor;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:7px;flex-shrink:0}
+.hstats{display:flex;gap:0;margin-top:72px;opacity:0;animation:fadein 1s 1.05s forwards}
+.hstat{padding:0 40px 0 0;border-right:1px solid var(--border)}
+.hstat:first-child{padding-left:0}
+.hstat:last-child{border-right:none}
+.snum{font-family:'Cormorant Garamond',serif;font-size:46px;line-height:1;color:var(--gold);font-weight:300}
+.slbl{font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--dim);margin-top:5px}
+
+/* TICKER */
+.tick{padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);overflow:hidden}
+.ti{display:flex;white-space:nowrap;animation:tk 32s linear infinite}
+.ti-item{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:6px;color:var(--dim);font-style:italic;padding:0 48px;flex-shrink:0}
+.ti-sep{width:3px;height:3px;background:var(--gold);border-radius:50%;opacity:.4;align-self:center;flex-shrink:0}
+
+/* SECTIONS */
+.sec{padding:110px 6%}
+.sec-label{display:flex;align-items:center;gap:16px;font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.sec-label span{display:block;width:32px;height:1px;background:var(--gold)}
+h2{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,5.5vw,78px);line-height:.92;letter-spacing:-1px;color:var(--white);font-weight:300}
+h2 em{font-style:italic;color:var(--gold)}
+.lead{font-size:13.5px;color:var(--sub);margin-top:20px;max-width:480px;font-weight:300;line-height:1.85}
+
+/* SERVICES */
+.svc-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:32px;margin-bottom:60px}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.sc{background:var(--bg);padding:48px 40px;position:relative;overflow:hidden;transition:background .4s;cursor:none}
+.sc:hover{background:var(--bg2)}
+.sc::before{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--gold);transition:width .5s}
+.sc:hover::before{width:100%}
+.sc-num{font-family:'Cormorant Garamond',serif;font-size:68px;color:var(--goldDim);line-height:.85;position:absolute;top:22px;right:32px;font-weight:300}
+.sc-ico{font-size:20px;width:48px;height:48px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:28px;transition:border-color .4s}
+.sc:hover .sc-ico{border-color:var(--gold)}
+.sc h3{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:400;color:var(--white);margin-bottom:14px;letter-spacing:.3px}
+.sc p{font-size:12px;color:var(--sub);line-height:1.85;font-weight:300}
+.sc-link{display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-size:8.5px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;opacity:0;transform:translateY(6px);transition:all .35s}
+.sc:hover .sc-link{opacity:1;transform:translateY(0)}
+
+/* ABOUT */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--bg2)}
+.about-img{position:relative;overflow:hidden;min-height:580px}
+.about-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(12%);transition:transform .9s}
+.about:hover .about-img img{transform:scale(1.04)}
+.about-img-overlay{position:absolute;inset:0;background:linear-gradient(90deg,transparent 50%,var(--bg2) 100%)}
+.yr-badge{position:absolute;bottom:44px;left:44px;border:1px solid var(--borderHard);padding:26px 30px;background:rgba(11,13,19,.88);backdrop-filter:blur(12px)}
+.yr-badge strong{display:block;font-family:'Cormorant Garamond',serif;font-size:60px;line-height:1;color:var(--gold);font-weight:300}
+.yr-badge span{font-size:7.5px;letter-spacing:5px;color:var(--sub);text-transform:uppercase;margin-top:4px;display:block}
+.about-body{padding:100px 72px;display:flex;flex-direction:column;justify-content:center}
+.feat-list{margin-top:40px;display:flex;flex-direction:column}
+.feat{display:flex;align-items:flex-start;gap:20px;padding:22px 0;border-bottom:1px solid var(--border)}
+.feat:last-child{border-bottom:none}
+.feat-ico{width:40px;height:40px;flex-shrink:0;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--gold)}
+.feat-txt h4{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--white);margin-bottom:5px}
+.feat-txt p{font-size:11.5px;color:var(--sub);line-height:1.75;font-weight:300}
+.btn-ghost{background:transparent;color:var(--gold);border:1px solid var(--borderHard);padding:14px 36px;font-family:'DM Sans';font-size:9px;letter-spacing:4px;font-weight:500;text-transform:uppercase;cursor:none;transition:all .35s;margin-top:40px;display:inline-block}
+.btn-ghost:hover{background:var(--gold);color:var(--bg)}
+
+/* PORTFOLIO */
+.port-hd{padding:80px 6% 44px;background:var(--bg)}
+.pg{display:grid;grid-template-columns:repeat(12,1fr);gap:2px}
+.pi{position:relative;overflow:hidden;cursor:none;background:var(--bg3)}
+.pi:nth-child(1){grid-column:span 7;aspect-ratio:16/9}
+.pi:nth-child(2){grid-column:span 5}
+.pi:nth-child(3){grid-column:span 4;aspect-ratio:1}
+.pi:nth-child(4){grid-column:span 4}
+.pi:nth-child(5){grid-column:span 4}
+.pi img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(30%);transition:transform .75s,filter .75s}
+.pi:hover img{transform:scale(1.06);filter:grayscale(0%)}
+.pi-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.pi-ph-inner{text-align:center;opacity:.1}
+.pi-ph-inner span{font-size:72px;display:block}
+.pi-ph-inner p{font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:4px;color:var(--white)}
+.pov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(11,13,19,.96) 0%,rgba(11,13,19,.2) 50%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:36px;opacity:0;transition:opacity .5s}
+.pi:hover .pov{opacity:1}
+.pcat{font-size:7.5px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.pttl{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--white);letter-spacing:.3px;margin-bottom:14px}
+.pbar{width:0;height:1px;background:var(--gold);transition:width .45s .1s}
+.pi:hover .pbar{width:48px}
+.pg-cta{text-align:center;padding:56px 6% 100px;background:var(--bg)}
+
+/* PROCESS */
+.process{background:var(--bg2);border-top:1px solid var(--border)}
+.proc-hd{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:28px;margin-bottom:64px}
+.proc-note{font-size:13px;color:var(--sub);max-width:300px;line-height:1.85;font-weight:300}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border)}
+.step{padding:48px 40px;border-right:1px solid var(--border);position:relative;overflow:hidden;transition:background .4s}
+.step:last-child{border-right:none}
+.step:hover{background:var(--bg3)}
+.step::after{content:'';position:absolute;top:0;left:0;width:0;height:2px;background:var(--gold);transition:width .5s}
+.step:hover::after{width:100%}
+.step-bg{font-family:'Cormorant Garamond',serif;font-size:90px;color:rgba(200,169,110,.05);line-height:1;position:absolute;bottom:-12px;right:22px;font-weight:300}
+.step-n{font-size:8px;letter-spacing:4px;color:var(--gold);font-weight:500;margin-bottom:18px;text-transform:uppercase}
+.step-bar{width:22px;height:1px;background:var(--gold);margin-bottom:22px;transition:width .4s}
+.step:hover .step-bar{width:44px}
+.step h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--white);margin-bottom:12px}
+.step p{font-size:12px;color:var(--sub);line-height:1.85;font-weight:300}
+
+/* CTA */
+.cta-sec{position:relative;background:var(--bg);padding:130px 6%;border-top:1px solid var(--border);overflow:hidden}
+.cta-sec-bg{position:absolute;top:0;right:0;width:55%;height:100%;background:linear-gradient(135deg,transparent,var(--goldDim));clip-path:polygon(14% 0,100% 0,100% 100%,0 100%);pointer-events:none}
+.cta-inner{position:relative;z-index:1;max-width:640px}
+.cta-sec h2{font-size:clamp(46px,6.5vw,92px);margin-bottom:24px}
+.cta-sec .lead{margin-bottom:52px;max-width:460px}
+.cta-btns{display:flex;gap:14px;flex-wrap:wrap}
+
+/* TESTIMONIALS */
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:60px}
+.card{background:var(--bg2);padding:48px 40px;transition:background .4s;position:relative;cursor:none;overflow:hidden}
+.card:hover{background:var(--bg3)}
+.card::before{content:'';position:absolute;bottom:0;right:0;width:0;height:1px;background:var(--gold);transition:width .5s}
+.card:hover::before{width:100%}
+.qmark{font-family:'Cormorant Garamond',serif;font-size:88px;color:var(--goldDim);line-height:.8;position:absolute;top:22px;left:32px;font-weight:300}
+.qt{font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(237,233,224,.85);line-height:1.75;margin-bottom:36px;font-weight:300;font-style:italic;position:relative;z-index:1}
+.qa{display:flex;align-items:center;gap:14px}
+.qav{width:44px;height:44px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);flex-shrink:0}
+.qan{font-size:13px;font-weight:600;color:var(--white)}
+.qar{font-size:9px;letter-spacing:2px;color:var(--sub);text-transform:uppercase;margin-top:3px}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:88px 6% 36px}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:64px;margin-bottom:64px}
+.fbrand .f-about{font-size:12px;color:var(--sub);line-height:1.95;margin-top:22px;font-weight:300;max-width:270px}
+.fc h5{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;letter-spacing:3px;color:var(--white);margin-bottom:24px;text-transform:uppercase}
+.fc ul{list-style:none}
+.fc li{margin-bottom:13px}
+.fc a{text-decoration:none;color:var(--sub);font-size:12px;transition:color .3s;font-weight:300}
+.fc a:hover{color:var(--gold)}
+.fb{border-top:1px solid var(--border);padding-top:30px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--dim);flex-wrap:wrap;gap:14px;letter-spacing:1px}
+.socs{display:flex;gap:6px}
+.soc{width:36px;height:36px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;cursor:none;transition:all .3s;text-decoration:none;color:var(--sub)}
+.soc:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ANIMATIONS */
+@keyframes fadein{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .85s,transform .85s}
+.rv.vs{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr}
+  .hright{display:none}
+  .hleft{min-height:100vh;padding:150px 6% 100px}
+  .hstats{flex-wrap:wrap;gap:24px 40px}
+  .services-grid{grid-template-columns:repeat(2,1fr)}
+  .about{grid-template-columns:1fr}
+  .about-img{min-height:420px}
+  .about-img-overlay{background:linear-gradient(0deg,var(--bg2) 0%,transparent 50%)}
+  .about-body{padding:64px 6%}
+  .pg{grid-template-columns:repeat(2,1fr)}
+  .pi:nth-child(1){grid-column:span 2;aspect-ratio:16/8}
+  .pi:nth-child(2){grid-column:span 2}
+  .pi:nth-child(n){aspect-ratio:4/3}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .step:nth-child(2){border-right:none}
+  .step:nth-child(1),.step:nth-child(2){border-bottom:1px solid var(--border)}
+  .step:nth-child(3){border-right:none}
+  .tgrid{grid-template-columns:1fr}
+  .ft{grid-template-columns:1fr 1fr;gap:44px}
+}
+@media(max-width:768px){
+  .nl,.ncta{display:none !important}
+  .hmb{display:flex}
+  nav{padding:20px 6%}
+  .pg{display:flex;flex-direction:column}
+  .pi{min-height:230px}
+  .steps{grid-template-columns:1fr;border:none;gap:1px}
+  .step{border-right:none !important;border-bottom:1px solid var(--border) !important}
+  .step:last-child{border-bottom:none !important}
+  .tgrid{grid-template-columns:1fr}
+  .ft{grid-template-columns:1fr}
+  .fb{flex-direction:column;text-align:center}
+  h2{font-size:clamp(40px,11vw,62px)}
+  .cta-btns{flex-direction:column;align-items:flex-start}
+  .proc-hd{flex-direction:column}
+  .svc-head{flex-direction:column}
+  .hstats{flex-wrap:wrap;gap:20px 36px}
+}
+@media(max-width:480px){
+  .sec{padding:72px 6%}
+  .about-body{padding:52px 6%}
+  .btns{flex-direction:column}
+  .btn,.bto{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<!-- GRAIN -->
+<div class="grain"></div>
+<!-- CURSOR -->
+<div class="c-dot" id="cdot"></div>
+<div class="c-ring" id="cring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo">
+    <img class="limg" src="qr-media-logo.png" alt="IncorpMedia Productions">
+    <div class="ltxt"><strong>IncorpMedia</strong><em>Productions</em></div>
+  </div>
+  <ul class="nl">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="ncta">Contact Us</button>
+  <button class="hmb" id="hmb" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mmenu" id="mmenu">
+  <ul class="mml">
+    <li><a href="#home" class="mma">Home</a></li>
+    <li><a href="#services" class="mma">Services</a></li>
+    <li><a href="#about" class="mma">About</a></li>
+    <li><a href="#portfolio" class="mma">Portfolio</a></li>
+    <li><a href="#contact" class="mma">Contact</a></li>
+  </ul>
+  <button class="mmcta">Contact Us</button>
+</div>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="hleft">
+    <div class="hero-rule"></div>
+    <div class="badge">Award-Winning Production Studio</div>
+    <h1>Where<br><em>Vision</em><br>Meets the<br>Screen</h1>
+    <p class="hsub">IncorpMedia Productions crafts powerful visual stories &mdash; from cinematic brand films and commercials to full-scale media productions that leave lasting impressions.</p>
+    <div class="btns">
+      <button class="btn"><span>View Our Portfolio</span></button>
+      <button class="bto"><span class="play-icon">&#9658;</span>Watch Our Reel</button>
+    </div>
+    <div class="hstats">
+      <div class="hstat"><div class="snum">12+</div><div class="slbl">Years Active</div></div>
+      <div class="hstat"><div class="snum">300+</div><div class="slbl">Projects Done</div></div>
+      <div class="hstat"><div class="snum">98%</div><div class="slbl">Client Satisfaction</div></div>
+    </div>
+  </div>
+  <div class="hright">
+    <img class="hright-img" src="SIdeImage.png" alt="Film production studio">
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="tick">
+  <div class="ti">
+    <div class="ti-item">Video Production</div><div class="ti-sep"></div>
+    <div class="ti-item">Brand Films</div><div class="ti-sep"></div>
+    <div class="ti-item">Commercial Ads</div><div class="ti-sep"></div>
+    <div class="ti-item">Live Events</div><div class="ti-sep"></div>
+    <div class="ti-item">Post Production</div><div class="ti-sep"></div>
+    <div class="ti-item">Motion Graphics</div><div class="ti-sep"></div>
+    <div class="ti-item">Photography</div><div class="ti-sep"></div>
+    <div class="ti-item">Podcast Studio</div><div class="ti-sep"></div>
+    <div class="ti-item">Video Production</div><div class="ti-sep"></div>
+    <div class="ti-item">Brand Films</div><div class="ti-sep"></div>
+    <div class="ti-item">Commercial Ads</div><div class="ti-sep"></div>
+    <div class="ti-item">Live Events</div><div class="ti-sep"></div>
+    <div class="ti-item">Post Production</div><div class="ti-sep"></div>
+    <div class="ti-item">Motion Graphics</div><div class="ti-sep"></div>
+    <div class="ti-item">Photography</div><div class="ti-sep"></div>
+    <div class="ti-item">Podcast Studio</div><div class="ti-sep"></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services" class="sec">
+  <div class="svc-head rv">
+    <div>
+      <div class="sec-label"><span></span>What We Do</div>
+      <h2>Core Production<br><em>Services</em></h2>
+    </div>
+    <p class="lead">From concept to delivery, we handle every stage of the production pipeline with precision and creative excellence.</p>
+  </div>
+  <div class="services-grid rv">
+    <div class="sc"><div class="sc-num">01</div><div class="sc-ico">&#127916;</div><h3>Video Production</h3><p>Full-service video production covering commercials, documentaries, and corporate content from planning through final delivery.</p><div class="sc-link">View Service &#8594;</div></div>
+    <div class="sc"><div class="sc-num">02</div><div class="sc-ico">&#127912;</div><h3>Motion Graphics</h3><p>Dynamic animations and motion design that transform static ideas into compelling narratives for broadcast and digital.</p><div class="sc-link">View Service &#8594;</div></div>
+    <div class="sc"><div class="sc-num">03</div><div class="sc-ico">&#128225;</div><h3>Live Event Coverage</h3><p>Professional multi-camera live production for concerts, conferences, product launches, and broadcast events worldwide.</p><div class="sc-link">View Service &#8594;</div></div>
+    <div class="sc"><div class="sc-num">04</div><div class="sc-ico">&#127897;</div><h3>Podcast &amp; Audio</h3><p>Studio-quality podcast production and sonic branding that gives your voice the professional platform it deserves.</p><div class="sc-link">View Service &#8594;</div></div>
+    <div class="sc"><div class="sc-num">05</div><div class="sc-ico">&#128247;</div><h3>Commercial Photography</h3><p>High-impact product, lifestyle, and editorial photography crafted to define brand identity and visual storytelling.</p><div class="sc-link">View Service &#8594;</div></div>
+    <div class="sc"><div class="sc-num">06</div><div class="sc-ico">&#9986;</div><h3>Post Production</h3><p>Expert editing, color grading, VFX compositing, and sound design polishing raw footage into broadcast-ready content.</p><div class="sc-link">View Service &#8594;</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about rv">
+  <div class="about-img">
+    <img src="feature%20image.jpg" alt="Video Production Feature">
+    <div class="about-img-overlay"></div>
+    <div class="yr-badge">
+      <strong>12+</strong>
+      <span>Years of Excellence</span>
+    </div>
+  </div>
+  <div class="about-body rv d2">
+    <div class="sec-label"><span></span>Our Story</div>
+    <h2>Connecting People<br><em>Through Story</em></h2>
+    <p class="lead">At IncorpMedia Productions, we believe every brand has a story worth telling &mdash; and we have the craft to tell it beautifully.</p>
+    <div class="feat-list">
+      <div class="feat"><div class="feat-ico">&#127942;</div><div class="feat-txt"><h4>Award-Winning Team</h4><p>Our crew brings decades of combined experience across film, television, and digital media.</p></div></div>
+      <div class="feat"><div class="feat-ico">&#128295;</div><div class="feat-txt"><h4>State-of-the-Art Equipment</h4><p>From RED cinema cameras to full broadcast rigs &mdash; we have the tools to match your vision.</p></div></div>
+      <div class="feat"><div class="feat-ico">&#127758;</div><div class="feat-txt"><h4>Global Reach, Local Heart</h4><p>We've produced content across 20+ countries while keeping our roots in authentic storytelling.</p></div></div>
+    </div>
+    <button class="btn-ghost">Learn More About Us</button>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<div class="port-hd rv" id="portfolio">
+  <div class="sec-label"><span></span>Our Work</div>
+  <h2>Recent <em>Productions</em></h2>
+  <p class="lead">A selection of our latest work &mdash; each project a story told with purpose and passion.</p>
+</div>
+<div class="pg rv">
+  <div class="pi"><div class="pi-ph"><div class="pi-ph-inner"><span>&#127916;</span><p>Brand Film</p></div></div><div class="pov"><div class="pcat">Brand Film</div><div class="pttl">Global Launch Campaign &mdash; TechCorp 2024</div><div class="pbar"></div></div></div>
+  <div class="pi"><div class="pi-ph"><div class="pi-ph-inner"><span>&#128225;</span><p>Live Event</p></div></div><div class="pov"><div class="pcat">Live Event</div><div class="pttl">Annual Summit Coverage</div><div class="pbar"></div></div></div>
+  <div class="pi"><div class="pi-ph"><div class="pi-ph-inner"><span>&#127912;</span><p>Motion</p></div></div><div class="pov"><div class="pcat">Motion Design</div><div class="pttl">Product Reveal Sequence</div><div class="pbar"></div></div></div>
+  <div class="pi"><div class="pi-ph"><div class="pi-ph-inner"><span>&#128247;</span><p>Photography</p></div></div><div class="pov"><div class="pcat">Photography</div><div class="pttl">Lifestyle Brand Shoot</div><div class="pbar"></div></div></div>
+  <div class="pi"><div class="pi-ph"><div class="pi-ph-inner"><span>&#9986;</span><p>Post</p></div></div><div class="pov"><div class="pcat">Post Production</div><div class="pttl">Documentary Short &mdash; Untold</div><div class="pbar"></div></div></div>
+</div>
+<div class="pg-cta rv">
+  <button class="btn"><span>View All Projects</span></button>
+</div>
+
+<!-- PROCESS -->
+<section class="sec process">
+  <div class="proc-hd rv">
+    <div>
+      <div class="sec-label"><span></span>How We Work</div>
+      <h2>Our Production<br><em>Process</em></h2>
+    </div>
+    <p class="proc-note">A proven workflow turning your brief into a finished product &mdash; on time, on budget, on point.</p>
+  </div>
+  <div class="steps rv">
+    <div class="step"><div class="step-n">Step 01</div><div class="step-bar"></div><h3>Discovery &amp; Brief</h3><p>We deep-dive into your goals, audience, and brand to craft a strategic production brief.</p><div class="step-bg">01</div></div>
+    <div class="step d1"><div class="step-n">Step 02</div><div class="step-bar"></div><h3>Pre-Production</h3><p>Scripting, storyboarding, casting, location scouting, and full crew scheduling.</p><div class="step-bg">02</div></div>
+    <div class="step d2"><div class="step-n">Step 03</div><div class="step-bar"></div><h3>Production</h3><p>Expert cinematography, lighting, and direction capturing every moment with precision.</p><div class="step-bg">03</div></div>
+    <div class="step d3"><div class="step-n">Step 04</div><div class="step-bar"></div><h3>Delivery</h3><p>Edit, grade, mix, master &mdash; polished broadcast-ready content for every platform.</p><div class="step-bg">04</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="cta-sec rv">
+  <div class="cta-sec-bg"></div>
+  <div class="cta-inner">
+    <div class="sec-label"><span></span>Get in Touch</div>
+    <h2>Ready to Tell<br><em>Your Story?</em></h2>
+    <p class="lead">Let's build something extraordinary together. Talk to us about your next production &mdash; we'd love to hear from you.</p>
+    <div class="cta-btns">
+      <button class="btn"><span>Start a Project</span></button>
+      <button class="btn-ghost">hello@incorpmedia.com</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec">
+  <div class="rv">
+    <div class="sec-label"><span></span>Client Voices</div>
+    <h2>What They <em>Say</em></h2>
+  </div>
+  <div class="tgrid">
+    <div class="card rv d1"><div class="qmark">&ldquo;</div><p class="qt">&ldquo;IncorpMedia turned our vague concept into a cinematic brand film that blew our whole team away. The attention to detail is unmatched.&rdquo;</p><div class="qa"><div class="qav">JR</div><div><div class="qan">James Reyes</div><div class="qar">Marketing Director, NovaBrand</div></div></div></div>
+    <div class="card rv d2"><div class="qmark">&ldquo;</div><p class="qt">&ldquo;From live event production to full post, they handled everything. Our conference stream looked like a full network broadcast.&rdquo;</p><div class="qa"><div class="qav">SL</div><div><div class="qan">Sophia Lim</div><div class="qar">Head of Events, Summit Corp</div></div></div></div>
+    <div class="card rv d3"><div class="qmark">&ldquo;</div><p class="qt">&ldquo;Their motion graphics team is next level. Our product launch video exceeded 2M views in the first week. Incredible results.&rdquo;</p><div class="qa"><div class="qav">MC</div><div><div class="qan">Marco Cruz</div><div class="qar">CEO, LaunchPad Tech</div></div></div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div class="fbrand">
+      <div class="logo">
+        <img class="limg" src="qr-media-logo.png" alt="IncorpMedia Productions">
+        <div class="ltxt"><strong>IncorpMedia</strong><em>Productions</em></div>
+      </div>
+      <p class="f-about">Where vision meets the screen. Full-service media production delivering cinematic excellence for brands, events, and stories that matter.</p>
+    </div>
+    <div class="fc"><h5>Services</h5><ul><li><a href="#">Video Production</a></li><li><a href="#">Motion Graphics</a></li><li><a href="#">Live Events</a></li><li><a href="#">Post Production</a></li><li><a href="#">Photography</a></li></ul></div>
+    <div class="fc"><h5>Company</h5><ul><li><a href="#">About Us</a></li><li><a href="#">Our Team</a></li><li><a href="#">Portfolio</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li></ul></div>
+    <div class="fc"><h5>Contact</h5><ul><li><a href="#">Get a Quote</a></li><li><a href="#">hello@incorpmedia.com</a></li><li><a href="#">+1 (800) 555-MEDIA</a></li><li><a href="#">Studio Location</a></li></ul></div>
+  </div>
+  <div class="fb">
+    <span>&copy; 2026 IncorpMedia Productions. All rights reserved.</span>
+    <div class="socs">
+      <a class="soc" href="#">f</a>
+      <a class="soc" href="#">in</a>
+      <a class="soc" href="#">&#9658;</a>
+      <a class="soc" href="#">ig</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vs')}),{threshold:.07});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',scrollY>60);
+});
+const dot=document.getElementById('cdot'),ring=document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function tick(){
+  rx+=(mx-rx)*.13;ry+=(my-ry)*.13;
+  dot.style.left=mx+'px';dot.style.top=my+'px';
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(tick);
+})();
+document.querySelectorAll('a,button,.pi,.sc,.card,.step').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.transform='translate(-50%,-50%) scale(1.7)';ring.style.opacity='.8';ring.style.borderColor='var(--gold2)';});
+  el.addEventListener('mouseleave',()=>{ring.style.transform='translate(-50%,-50%) scale(1)';ring.style.opacity='.45';ring.style.borderColor='var(--gold)';});
+});
+const hmb=document.getElementById('hmb'),mmenu=document.getElementById('mmenu');
+function closeMenu(){hmb.classList.remove('open');mmenu.classList.remove('open');document.body.style.overflow='';}
+hmb.addEventListener('click',()=>{
+  const opening=!mmenu.classList.contains('open');
+  mmenu.classList.toggle('open');hmb.classList.toggle('open');
+  document.body.style.overflow=opening?'hidden':'';
+});
+document.querySelectorAll('.mma,.mmcta').forEach(el=>el.addEventListener('click',closeMenu));
+window.addEventListener('resize',()=>{if(window.innerWidth>768)closeMenu();});
+</script>
+</body>
+</html>
